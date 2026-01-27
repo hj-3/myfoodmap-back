@@ -49,4 +49,4 @@ jobs:
             --application-name myfoodmap \
             --deployment-config-name CodeDeployDefault.AllAtOnce \
             --deployment-group-name myfoodmap-back-deploy \
-            --s-location bucket=${{ secrets.S3_BACK_BUCKET_NAME }},bundleType=zip,key=deploy.zip
+            --s3-location bucket=${{ secrets.S3_BACK_BUCKET_NAME }},bundleType=zip,key=deploy.zip
