@@ -1,19 +1,32 @@
 #!/bin/bash
-# 1. 작업 디렉토리 이동
 cd /home/ec2-user/backend
 
-# 2. nvm 및 npm 경로 강제 로드
-# ec2-user 홈 디렉토리를 명시적으로 지정합니다.
-export NVM_DIR="/home/ec2-user/.nvm"
+# 1. 환경 변수 설정
+export HOME="/home/ec2-user"
+export NVM_DIR="$HOME/.nvm"
+
+# 2. NVM이 없으면 설치, 있으면 로드
+if [ ! -d "$NVM_DIR" ]; then
+    echo "NVM not found. Installing..."
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+fi
+
+# NVM 로드
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-# 3. nvm 명령어를 못 찾을 경우를 대비해 PATH 수동 추가
-export PATH="$NVM_DIR/versions/node/$(ls $NVM_DIR/versions/node | head -n 1)/bin:$PATH"
+# 3. Node.js 설치 확인 및 설치 (LTS 버전)
+if ! command -v node &> /dev/null; then
+    echo "Node.js not found. Installing LTS..."
+    nvm install --lts
+    nvm use --lts
+fi
 
-# 4. 제대로 잡혔는지 로그 확인 (CodeDeploy 로그에서 확인 가능)
-echo "Current PATH: $PATH"
-node -v
-npm -v
+# 4. PATH 강제 업데이트
+export PATH="$NVM_DIR/versions/node/$(nvm current)/bin:$PATH"
 
-# 5. 의존성 설치
+# 5. 확인 로그
+echo "Node version: $(node -v)"
+echo "NPM version: $(npm -v)"
+
+# 6. 의존성 설치
 npm install
