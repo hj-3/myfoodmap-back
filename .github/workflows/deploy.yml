@@ -1,0 +1,52 @@
+name: Backend Deploy to ASG
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # .env 파일 생성 (Secrets에 저장된 값들을 활용)
+      - name: Create .env file
+        run: |
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
+          echo "DB_PASS=${{ secrets.DB_PASS }}" >> .env
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
+
+      # 프로젝트 압축 (appspec.yml과 scripts 폴더 포함 필수)
+      - name: Zip project files
+        run: zip -r ./deploy.zip . -x "*.git*" "node_modules/*"
+
+      # AWS 자격 증명 설정
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      # S3에 압축 파일 업로드
+      - name: Upload to S3
+        run: aws s3 cp ./deploy.zip s3://${{ secrets.S3_BACK_BUCKET_NAME }}/deploy.zip
+
+      # CodeDeploy 실행
+      - name: CodeDeploy
+        run: |
+          aws deploy create-deployment \
+            --application-name myfoodmap \
+            --deployment-config-name CodeDeployDefault.AllAtOnce \
+            --deployment-group-name myfoodmap-back-deploy \
+            --s3-location bucket=${{ secrets.S3_BACK_BUCKET_NAME }},bundleType=zip,key=deploy.zip
