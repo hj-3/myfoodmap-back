@@ -101,6 +101,7 @@ app.post('/api/auth/login', async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ message: '아이디 또는 비밀번호가 일치하지 않습니다.' });
     }
+    
 
     // 로그인 성공 시 userId(숫자)를 함께 보냄
     res.json({ 

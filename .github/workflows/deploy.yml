@@ -46,7 +46,7 @@ jobs:
       - name: CodeDeploy
         run: |
           aws deploy create-deployment \
-            --application-name YourCodeDeployAppName \
+            --application-name myfoodmap \
             --deployment-config-name CodeDeployDefault.AllAtOnce \
-            --deployment-group-name YourDeploymentGroupName \
+            --deployment-group-name myfoodmap-back-deploy \
             --s-location bucket=${{ secrets.S3_BUCKET_NAME }},bundleType=zip,key=deploy.zip
