@@ -1,0 +1,53 @@
+// backend/prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// 1. 사용자 테이블
+model User {
+  userId    Int      @id @default(autoincrement()) 
+  username  String   @unique                       
+  password  String
+  nickname  String
+  
+  reviews   Review[] 
+  createdAt DateTime @default(now())
+}
+
+// 2. 식당 테이블
+model Restaurant {
+  restaurantId Int      @id @default(autoincrement()) 
+  kakaoId      String   @unique
+  name         String
+  address      String?
+  category     String?
+  x            String?  // 경도 (Longitude) 
+  y            String?  // 위도 (Latitude)  
+  
+  reviews      Review[] 
+}
+
+// 3. 리뷰 테이블
+model Review {
+  reviewId     Int        @id @default(autoincrement()) 
+  
+  user         User       @relation(fields: [userId], references: [userId])
+  userId       Int
+  
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [restaurantId])
+  restaurantId Int
+
+  rating       Int
+  content      String     @db.Text
+  imageUrl     String?
+  menuName     String?
+  price        Int?
+  visitDate    DateTime   @default(now())
+  createdAt    DateTime   @default(now())
+}
