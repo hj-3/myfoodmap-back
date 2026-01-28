@@ -12,7 +12,7 @@ const app = express();
 
 // 1. 미들웨어 설정
 app.use(cors({
-  origin: `https://${process.env.FRONT_URL}`, // 내 프론트엔드 CF 주소 (슬래시 없이!)
+  origin: process.env.FRONT_URL, // 내 프론트엔드 CF 주소 (슬래시 없이!)
   credentials: true, // 쿠키 등을 주고받으려면 필수
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // 허용할 메서드
 }));
