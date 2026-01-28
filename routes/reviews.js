@@ -90,7 +90,7 @@ router.get('/:username', async (req, res) => {
 router.put('/:reviewId', authenticateToken, async (req, res) => {
   const { reviewId } = req.params;
   const userId = req.user.userId;
-  const { rating, content, menuName, price, visitDate } = req.body;
+  const { rating, content, menuName, price, visitDate, imageUrl } = req.body;
 
   try {
     // 3-1. 리뷰 작성자 확인
@@ -107,8 +107,8 @@ router.put('/:reviewId', authenticateToken, async (req, res) => {
       .toISOString().slice(0, 19).replace('T', ' ');
 
     await pool.query(
-      'UPDATE review SET rating = ?, content = ?, menuName = ?, price = ?, visitDate = ? WHERE reviewId = ?',
-      [rating, content, menuName, price, formattedVisitDate, reviewId]
+      'UPDATE review SET rating = ?, content = ?, menuName = ?, price = ?, visitDate = ?, imageUrl = ? WHERE reviewId = ?',
+      [rating, content, menuName, price, formattedVisitDate, imageUrl, reviewId]
     );
     res.json({ message: '리뷰가 수정되었습니다!' });
   } catch (err) {

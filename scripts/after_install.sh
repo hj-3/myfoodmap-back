@@ -22,3 +22,6 @@ echo "NPM version: $(npm -v)"
 # 6. 의존성 설치
 # 이제 ec2-user 권한으로 마음껏 node_modules를 만들 수 있습니다.
 npm install
+
+mkdir -p uploads
+chmod 777 uploads
