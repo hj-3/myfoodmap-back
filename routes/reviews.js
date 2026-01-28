@@ -40,20 +40,14 @@ router.post('/',
       imageUrl, visitDate
     } = req.body;
 
-<<<<<<< HEAD
-// 3. 리뷰 수정 API (인증 및 권한 확인 필요)
-router.put('/:reviewId', authenticateToken, async (req, res) => {
-  const { reviewId } = req.params;
-  const userId = req.user.userId;
-  const { rating, content, menuName, price, visitDate, imageUrl } = req.body;
-=======
+
     try {
       const restaurant = await prisma.restaurant.upsert({
         where: { kakaoId: kakaoId },
         update: { name, address, category, x, y },
         create: { kakaoId, name, address, category, x, y },
       });
->>>>>>> origin/choi
+      
 
       const newReview = await prisma.review.create({
         data: {
@@ -132,18 +126,7 @@ router.get('/:username',
     }
   });
 
-<<<<<<< HEAD
-    await pool.query(
-      'UPDATE review SET rating = ?, content = ?, menuName = ?, price = ?, visitDate = ?, imageUrl = ? WHERE reviewId = ?',
-      [rating, content, menuName, price || 0, formattedVisitDate, imageUrl || null, reviewId]
-    );
-    res.json({ message: '리뷰가 수정되었습니다!' });
-  } catch (err) {
-    console.error("수정 에러:", err);
-    res.status(500).json({ message: '리뷰 수정 중 오류가 발생했습니다.' });
-  }
-});
-=======
+
 // 3. 리뷰 수정 API (인증 및 검증 필요)
 router.put('/:reviewId',
   authenticateToken,
@@ -161,7 +144,7 @@ router.put('/:reviewId',
     const reviewId = parseInt(req.params.reviewId);
     const userId = req.user.userId;
     const { rating, content, menuName, price, visitDate, imageUrl } = req.body;
->>>>>>> origin/choi
+
 
     try {
       const review = await prisma.review.findUnique({
