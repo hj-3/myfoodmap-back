@@ -28,6 +28,7 @@ jobs:
           echo "FRONT_CF_URL=${{ secrets.FRONT_CF_URL }}" >> .env
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
           echo "S3_IMAGE_BUCKET_NAME=${{ secrets.S3_IMAGE_BUCKET_NAME }}" >> .env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
 
       # 프로젝트 압축 (appspec.yml과 scripts 폴더 포함 필수)
       - name: Zip project files

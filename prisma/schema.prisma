@@ -6,7 +6,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DB_HOST")
+  url      = env("DATABASE_URL")
 }
 
 // 1. 사용자 테이블
