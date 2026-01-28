@@ -46,8 +46,8 @@ model Review {
   rating       Int
   content      String     @db.Text
   imageUrl     String?
-  menuName     String?
-  price        Int?
-  visitDate    DateTime   @default(now())
+  menuName     String
+  price        Int
+  visitDate    DateTime
   createdAt    DateTime   @default(now())
 }
