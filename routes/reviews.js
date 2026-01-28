@@ -108,7 +108,7 @@ router.put('/:reviewId', authenticateToken, async (req, res) => {
 
     await pool.query(
       'UPDATE review SET rating = ?, content = ?, menuName = ?, price = ?, visitDate = ?, imageUrl = ? WHERE reviewId = ?',
-      [rating, content, menuName, price, formattedVisitDate, imageUrl, reviewId]
+      [rating, content, menuName, price || 0, formattedVisitDate, imageUrl || null, reviewId]
     );
     res.json({ message: '리뷰가 수정되었습니다!' });
   } catch (err) {
