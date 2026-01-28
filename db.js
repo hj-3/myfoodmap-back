@@ -1,13 +1,8 @@
 // backend/db.js
-const mysql = require('mysql2/promise');
-require('dotenv').config();
+const { PrismaClient } = require('@prisma/client');
 
-// DB 연결 풀 생성 및 내보내기
-const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
-});
+// Prisma Client 인스턴스 생성 및 내보내기
+// 애플리케이션 전체에서 하나의 인스턴스를 공유합니다.
+const prisma = new PrismaClient();
 
-module.exports = pool;
+module.exports = prisma;
