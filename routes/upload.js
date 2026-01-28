@@ -1,16 +1,14 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const AWS = require('aws-sdk'); // 추가
+const { S3Client } = require('@aws-sdk/client-s3');
 const multerS3 = require('multer-s3'); // 추가
 const authenticateToken = require('../middleware/auth');
 
 const router = express.Router();
 
 // 1. AWS S3 설정 (IAM Role을 사용하므로 별도의 Key 입력 불필요)
-const s3 = new AWS.S3({
-  region: 'ap-northeast-2'
-});
+const s3 = new S3Client({ region: 'ap-northeast-2' });
 
 // 2. Multer S3 스토리지 설정
 const upload = multer({
